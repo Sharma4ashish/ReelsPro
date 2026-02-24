@@ -5,12 +5,15 @@ const MONGO_URI = process.env.MONGO_URI!
 if(!MONGO_URI){
     console.log("Please Provide Database Url");
 }
-let cachedDb = global.mongoose;
+
+// global.mongoose = {conn:null , promise : null}
+// let cachedDb = global.mongoose;
+
+let cachedDb = global.mongoose
 
 if(!cachedDb){
-     cachedDb = global.mongoose = {conn:null , promise :null}
+    cachedDb = global.mongoose = { conn:null , promise :null}
 }
-
 
 export async function connectToDb(){
     if(cachedDb.conn){
@@ -30,20 +33,14 @@ export async function connectToDb(){
         ).then(()=>{
             mongoose.connection
         })
-        
-
-        try {
-            cachedDb.conn = await cachedDb.promise
-        } catch (error) {
-            cachedDb.promise = null
-            throw error
-        }
-
-        return cachedDb.conn
-
-
     }
 
+    try {
+        cachedDb.conn = await cachedDb.promise
+    } catch (error) {
+        cachedDb.promise = null
+        throw new Error(`Error Connecting to Database  ${error}`)
+    }
     return cachedDb.conn
 
 }

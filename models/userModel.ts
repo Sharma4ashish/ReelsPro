@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs"
-import mongoose, { Schema, models, model } from "mongoose"
+import mongoose, { Schema } from "mongoose"
 
 interface Iuser{
     _id?:mongoose.Types.ObjectId,
@@ -28,4 +28,4 @@ userSchema.pre("save", async function(next){
 })
 
 
-export const User = models.User || model<Iuser>("User",userSchema)
+export const User = mongoose.models.User || mongoose.model<Iuser>("User",userSchema)
